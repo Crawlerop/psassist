@@ -1,0 +1,132 @@
+<html>
+    <head>
+        <title>PassiveAssists Demo</title>
+        <script src="./passiveassist.js" crossorigin=""></script>
+    </head>
+    <body>
+        <div id="searchtop">
+            <form action="" id="searchbar">
+                <label for="search" id="search1">Search for:</label>
+                <input type="text" id="search2" name="search">
+                <select id="search4" name="types">
+                    <option value="default">Default</option>
+                    <option value="single">Single</option>
+                    <option value="country">Country</option>
+                    <option value="region">Region</option>
+                    <option value="postcode">Postcode</option>
+                    <option value="district">District</option>
+                    <option value="place">Place</option>
+                    <option value="locality">Locality</option>
+                    <option value="neighborhood">Neighborhood</option>
+                    <option value="address">Address</option>
+                    <option value="poi">Point of Interest</option>
+                </select>
+                <label for="exact" id="search6">Exact Matching?</label>
+                <input type="checkbox" id="search5" value="exact">
+                <label for="dist" id="search7">Distance:</label>
+                <input type="number" id="search8" name="distance" size="12" value="3500">
+                <button type="button" id="search3">Search</button>
+            </form>
+            <style>
+                body {
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: larger;
+                }
+            </style>
+        </div>
+        <div id="tip"></div>
+        <br>
+        <div id="results"></div>
+        <script>
+            var xhr = new XMLHttpRequest()
+            var res = document.getElementById("results")
+            var cors = false
+
+            const tips = [
+                "PassiveAssist on SF!",
+                "San Jose on PassiveAssist!",
+                "Boor on search for city of M*V capital!",
+                "It has a same features as MapAd search!",
+                "BetterFPS mod in Minecraft were not made by the people from Bettendorf!"
+            ]
+
+            const urls = {
+                "single": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1",
+                "default": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000",
+                "country": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=country",
+                "region": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=region",
+                "postcode": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=postcode",
+                "district": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=district",
+                "place": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=place",
+                "locality": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=locality",
+                "neighborhood": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=neighborhood",
+                "address": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=address",
+                "poi": "https://api.mapbox.com/geocoding/v5/mapbox.places/(query).json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&limit=1000&types=poi",
+            }
+
+            document.getElementById("tip").innerHTML = "<b>Tip: </b>" + tips[Math.floor(Math.random() * tips.length)]
+
+            setInterval(function(){
+                document.getElementById("tip").innerHTML = "<b>Tip: </b>" + tips[Math.floor(Math.random() * tips.length)]
+            }, 5000)
+
+            document.getElementById("search3").onclick = function() {
+                if (document.getElementById("search2").value != "") { 
+                    if (document.getElementById("search2").value.startsWith("geo:")) { // geo:35.335992,-79.038636
+                        lval = document.getElementById("search2").value
+                        lpos = lval.split(":")[1]
+                        ll = lpos.split(",")
+                        xhr.open("GET",urls[document.getElementById("search4").value].replace("(query)", ll[1]+","+ll[0]) + (document.getElementById("search5").checked ? "&fuzzyMatch=false" : ""))
+                    } else {
+                        xhr.open("GET",urls[document.getElementById("search4").value].replace("(query)", document.getElementById("search2").value) + (document.getElementById("search5").checked ? "&fuzzyMatch=false" : ""))
+                    }
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status <= 399) {
+                            o = ""
+                            rs = JSON.parse(this.responseText)
+                            rs.features.forEach(function(feature){
+                                o += `<a href="getmaplace.html?lat=`+feature.center[1]+`&lng=`+feature.center[0]+`&q=`+document.getElementById("search2").value+`&type=`+document.getElementById("search4").value+`&exact=`+document.getElementById('search5').checked+`&dist=`+document.getElementById('search8').value+`">`+feature.place_name+` - `+feature.center[1]+`, `+feature.center[0]+`</a> - <a href="getmaplace.html?cors=true&lat=`+feature.center[1]+`&lng=`+feature.center[0]+`&q=`+document.getElementById("search2").value+`&type=`+document.getElementById("search4").value+`&exact=`+document.getElementById('search5').checked+`&dist=`+document.getElementById('search8').value+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+feature.center[1]+", "+feature.center[0]+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+feature.center[1]+","+feature.center[0]+`')">Copy geoURI</button><br>`
+                            })
+                            res.innerHTML = o
+                            //console.log(res.innerHTML)
+                        }
+                    }
+                    xhr.send()
+                }
+                res.innerHTML = ""
+            }
+
+            window.addEventListener('keydown', function(e) {
+                if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+                    if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
+                        e.preventDefault()
+                        document.getElementById("search3").onclick()
+                        return false
+                    }
+                }
+            }, true)
+
+            try {
+                up = new URLSearchParams(window.location.search)
+                document.getElementById("search2").value = up.get('q')
+                document.getElementById("search4").value = up.get('type')
+                document.getElementById("search8").value = up.get('dist')
+                
+                if (up.get('exact') == "true") {
+                    document.getElementById("search5").checked = true
+                }
+                resp = getAssist(up.get('lat'), up.get('lng'), document.getElementById("search8").value , 3, up.get('cors') == "true")
+                p = "Place Name: " + resp.placeName + "<br>"
+                if (resp.weather != null) {
+                    p += "Weather: " + resp.weather.status + "<br>"
+                    if (resp.weather.currentTemprature != "") {
+                        p += "Temprature: " + resp.weather.currentTemprature
+                    }
+                }
+                res.innerHTML = p
+            } catch (e) {
+
+            }
+        </script>
+    </body>
+</html>
