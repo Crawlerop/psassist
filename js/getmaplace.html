@@ -108,22 +108,30 @@
 
             try {
                 up = new URLSearchParams(window.location.search)
-                document.getElementById("search2").value = up.get('q')
-                document.getElementById("search4").value = up.get('type')
-                document.getElementById("search8").value = up.get('dist')
-                
+                if (up.get('q') != null) {
+                    document.getElementById("search2").value = up.get('q')
+                }
+                if (up.get('type') != null) {
+                    document.getElementById("search4").value = up.get('type')
+                }
+                if (up.get('dist') != null) {
+                    document.getElementById("search8").value = up.get('dist')
+                }
+
                 if (up.get('exact') == "true") {
                     document.getElementById("search5").checked = true
                 }
-                resp = getAssist(up.get('lat'), up.get('lng'), document.getElementById("search8").value , 3, up.get('cors') == "true")
-                p = "Place Name: " + resp.placeName + "<br>"
-                if (resp.weather != null) {
-                    p += "Weather: " + resp.weather.status + "<br>"
-                    if (resp.weather.currentTemprature != "") {
-                        p += "Temprature: " + resp.weather.currentTemprature
+                if (up.get('lat') != null && up.get('lng') != null) {
+                    resp = getAssist(up.get('lat'), up.get('lng'), document.getElementById("search8").value , 3, up.get('cors') == "true")
+                    p = "Place Name: " + resp.placeName + "<br>"
+                    if (resp.weather != null) {
+                        p += "Weather: " + resp.weather.status + "<br>"
+                        if (resp.weather.currentTemprature != "") {
+                            p += "Temprature: " + resp.weather.currentTemprature
+                        }
                     }
+                    res.innerHTML = p
                 }
-                res.innerHTML = p
             } catch (e) {
 
             }
