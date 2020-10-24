@@ -7,6 +7,6 @@ Get the stats for places.
 # How to use
 To use PassiveAssist library, you need to do the following actions:
 
-for Python                                    | for JavaScript
-:----------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:
-import passiveassistlib                   | <script src="https://raw.githubusercontent.com/Crawlerop/psassist/main/js/passiveassist.js" crossorigin=""></script>
+for Python                                | for JavaScript
+:----------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------:
+import passiveassistlib                   | ```<script src="https://raw.githubusercontent.com/Crawlerop/psassist/main/js/passiveassist.js" crossorigin=""></script>```
