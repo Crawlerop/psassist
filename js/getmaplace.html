@@ -121,7 +121,14 @@
                 p += "The data will update every 5 seconds."
                 res.innerHTML = p
                 if (!stopped) {
-                    setTimeout(function(){res.innerHTML = res.innerHTML.replace("The data will update every 5 seconds.", "Updating..."); setTimeout(function(){updatePassiveAssist(lat,lng,dist,cors)}, 250)}, 5000)
+                    setTimeout(function(){
+                        if (!stopped) {
+                            res.innerHTML = res.innerHTML.replace("The data will update every 5 seconds.", "Updating..."); 
+                            setTimeout( function() {
+                                updatePassiveAssist(lat,lng,dist,cors)
+                            }, 250)
+                        }
+                    }, 5000)
                 }
             }
 
