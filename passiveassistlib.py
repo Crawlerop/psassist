@@ -20,7 +20,8 @@ except Exception:
     )
     hsession.mount("http://", adapter)
     hsession.mount("https://", adapter)
-    htimeout = httpapi.Timeout(900)
+    #htimeout = httpapi.Timeout(900)
+    htimeout = 900
 
 PASSIVEASSIST_CURLOC = 7
 PASSIVEASSIST_CURLOC_PLACENAME = 1
