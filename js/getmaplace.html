@@ -51,7 +51,8 @@
                 "BetterFPS mod in Minecraft were not made by the people from Bettendorf!",
                 "The PassiveAssist data will update every 5 seconds. Please Enjoy!",
                 "If you want to fetch LPAds, please visit https://github.com/crawlerop/lpads right now!",
-                "Can you tell the difference between 55.85557,-3.967789 and 51.2859,-114.0106?"
+                "Can you tell the difference between 55.85557,-3.967789 and 51.2859,-114.0106?",
+                "We have implemented the support of Wikimedia's GeoHack!"
             ]
 
             const urls = {
@@ -123,7 +124,8 @@
                 p += `<a href="https://crawlerop.github.io/lpads/lpadsjs/mapads_marker.html?localads=true&lat=`+lat+`&lng=`+lng+`">LPAds nearby</a> `
                 p += `<a href="https://virtualglobetrotting.com/ll/`+lat+`,`+lng+`">VirtualGlobeTrotting</a> `
                 p += `<a href="https://www.google.com/maps/place/`+lat+`,`+lng+`/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps</a> `
-                p += `<a href="https://www.google.com/maps/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps (NoPin)</a>`
+                p += `<a href="https://www.google.com/maps/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps (NoPin)</a> `
+                p += `<a href="https://geohack.toolforge.org/geohack.php?language=en&params=`+lat+`;`+lng+`_type:gh_region:gh_scale:40000&pagename=`+resp.placeName+`">GeoHack</a>`
                 p += "<br><b>The data will update every 5 seconds.</b>"
                 res.innerHTML = p
                 if (!stopped) {
