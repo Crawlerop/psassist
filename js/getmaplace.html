@@ -120,7 +120,10 @@
                         p += "Temprature: " + resp.weather.currentTemprature + "<br><br>"
                     }
                 }
-                p += "The data will update every 5 seconds."
+                p += `<a href="https://crawlerop.github.io/lpads/lpadsjs/mapads_marker.html?localads=true&lat=`+lat+`&lng=`+lng+`">LPAds nearby</a> `
+                p += `<a href="https://virtualglobetrotting.com/ll/`+lat+`,`+lng+`">VirtualGlobeTrotting</a> `
+                p += `<a href="https://www.google.com/maps/place/`+lat+`,`+lng+`/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps</a>`
+                p += "<br><b>The data will update every 5 seconds.</b>"
                 res.innerHTML = p
                 if (!stopped) {
                     setTimeout(function(){
