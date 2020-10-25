@@ -13,17 +13,17 @@ function parseAssist(assist) {
         if (asWeather.length > 1) {
             asWeatherIcon = asWeather[PASSIVEASSIST_CURLOC_WEATHER_ICON]
         } else {
-            asWeatherIcon = None
+            asWeatherIcon = null
         }
         if (asWeather.length > 2) {
             asWeatherTemp = asWeather[PASSIVEASSIST_CURLOC_WEATHER_TEMPRATURE]
         } else {
-            asWeatherTemp = None
+            asWeatherTemp = null
         }
         if (asWeather.length > 3) { 
             asWeatherStat = asWeather[PASSIVEASSIST_CURLOC_WEATHER_STATUS]
         } else {
-            asWeatherStat = None
+            asWeatherStat = null
         }
         wout = {"weatherIcon":asWeatherIcon,"currentTemprature":asWeatherTemp,"status":asWeatherStat}
     }
