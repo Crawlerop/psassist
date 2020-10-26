@@ -113,33 +113,32 @@
             }, true)
 
             function updatePassiveAssist(lat,lng,dist,cors) {
-                resp = getAssist(lat, lng, dist, 3, cors)
-                p = "Place Name: " + resp.placeName + "<br>"
-                if (resp.weather != null) {
-                    p += "Weather: " + resp.weather.status + "<br>"
-                    if (resp.weather.currentTemprature != "") {
-                        p += "Temprature: " + resp.weather.currentTemprature + "<br><br>"
-                    }
-                }
-                p += `<a href="https://crawlerop.github.io/lpads/lpadsjs/mapads_marker.html?localads=true&lat=`+lat+`&lng=`+lng+`">LPAds nearby</a> `
-                p += `<a href="https://virtualglobetrotting.com/ll/`+lat+`,`+lng+`">VirtualGlobeTrotting</a> `
-                p += `<a href="https://www.google.com/maps/place/`+lat+`,`+lng+`/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps</a> `
-                p += `<a href="https://www.google.com/maps/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps (NoPin)</a> `
-                p += `<a href="https://geohack.toolforge.org/geohack.php?language=en&params=`+lat+`;`+lng+`_type:gh_region:gh_scale:40000&pagename=`+resp.placeName+`">GeoHack</a>`
-                p += "<br><b>The data will update every 5 seconds.</b>"
-                res.innerHTML = p
-                if (!stopped) {
-                    setTimeout(function(){
+                getAssistAsync(lat, lng, dist, 3, cors, function(resp){
+                    if (!stopped) {
+                        p = "Place Name: " + resp.placeName + "<br>"
+                        if (resp.weather != null) {
+                            p += "Weather: " + resp.weather.status + "<br>"
+                            if (resp.weather.currentTemprature != "") {
+                                p += "Temprature: " + resp.weather.currentTemprature + "<br><br>"
+                            }
+                        }
+                        p += `<a href="https://crawlerop.github.io/lpads/lpadsjs/mapads_marker.html?localads=true&lat=`+lat+`&lng=`+lng+`">LPAds nearby</a> `
+                        p += `<a href="https://virtualglobetrotting.com/ll/`+lat+`,`+lng+`">VirtualGlobeTrotting</a> `
+                        p += `<a href="https://www.google.com/maps/place/`+lat+`,`+lng+`/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps</a> `
+                        p += `<a href="https://www.google.com/maps/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps (NoPin)</a> `
+                        p += `<a href="https://geohack.toolforge.org/geohack.php?language=en&params=`+lat+`;`+lng+`_type:gh_region:gh_scale:40000&pagename=`+resp.placeName+`">GeoHack</a>`
+                        p += "<br><b>The data will update every 5 seconds.</b>"
+                        res.innerHTML = p
                         if (!stopped) {
-                            res.innerHTML = res.innerHTML.replace("The data will update every 5 seconds.", "Updating..."); 
-                            setTimeout( function() {
+                            setTimeout(function(){
                                 if (!stopped) {
+                                    res.innerHTML = res.innerHTML.replace("The data will update every 5 seconds.", "Updating..."); 
                                     updatePassiveAssist(lat,lng,dist,cors)
                                 }
-                            }, 250)
+                            }, 5000)
                         }
-                    }, 5000)
-                }
+                    }
+                })
             }
 
             try {
