@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Smarty Assist</title>
+    </head>
+    <body>
+        <h2>Smarty Assist</h2>
+        <noscript>Please enable the javascript for SmartyAssist to work!</noscript>
+        <form action="" id="searchbar">
+            <label for="search" id="search1">URL:</label>
+            <input type="text" id="search2" name="url" value="https://raw.githubusercontent.com/crawlerop/everysmartypinsquestions/newheights/main-orig.json">
+            <button type="button" id="search3">Go!</button>
+        </form>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: larger;
+            }
+        </style>
+        <div id="results"></div>
+        <script>
+                var loading = false;
+                var res = document.getElementById("results")
+
+                function start() {
+                    loading = true
+                    let s = new XMLHttpRequest()
+                    s.open("GET", document.getElementById("search2").value)
+                    s.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status <= 399) {
+                            o = ""
+                            data = JSON.parse(this.response).items
+                            data.forEach(function(i) {
+                                url = "getmaplace.html?lat="+i.answer.location.lat+"&lng="+i.answer.location.lng
+                                o += `<a href="`+url+`">`+i.slug+": "+i.answer.title+`</a> <a href="`+url+"&cors=true"+`">CORS</a><br>`
+                            })
+                            loading = false
+                            res.innerHTML = o
+                        }
+                    }
+                    s.onerror = function() {
+                        loading = false
+                    }
+                    s.send()
+                }
+                window.addEventListener('keydown', function(e) {
+                    if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+                        if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
+                            e.preventDefault()
+                            document.getElementById("search3").onclick()
+                            return false
+                        }
+                    }
+                }, true)
+                document.getElementById("search3").onclick = function() {
+                    res.innerHTML = ""
+                    start()
+                }
+                start()
+        </script>
+    </body>
+</html>
