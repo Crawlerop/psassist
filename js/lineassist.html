@@ -33,7 +33,7 @@
                                 lldata = data[k].url.split("@")[1].split(",")
                                 lat = lldata[0]; lng = lldata[1]; url = "getmaplace.html?lat="+lat+"&lng="+lng
                                 title = data[k]["line-1"] + ", " + data[k]["line-2"] + ": " + lat + "," + lng
-                                o += `<a href="`+url+`">`+title+`</a> <a href="`+url+"&cors=true"+`">CORS</a><br>`
+                                o += `<a href="`+url+`">`+title+`</a> <a href="`+url+"&cors=true"+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+lat+", "+lng+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+lat+","+lng+`')">Copy geoURI</button><br>`
                             }
                             loading = false
                             res.innerHTML = o

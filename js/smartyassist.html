@@ -31,7 +31,7 @@
                             data = JSON.parse(this.response).items
                             data.forEach(function(i) {
                                 url = "getmaplace.html?lat="+i.answer.location.lat+"&lng="+i.answer.location.lng
-                                o += `<a href="`+url+`">`+i.slug+": "+i.answer.title+`</a> <a href="`+url+"&cors=true"+`">CORS</a><br>`
+                                o += `<a href="`+url+`">`+i.slug+": "+i.answer.title+`</a> <a href="`+url+"&cors=true"+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+i.answer.location.lat+", "+i.answer.location.lng+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+i.answer.location.lat+","+i.answer.location.lng+`')">Copy geoURI</button><br>`
                             })
                             loading = false
                             res.innerHTML = o
