@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>Google Santa Tracker Assist</title>
+    </head>
+    <body>
+        <h2>Google Santa Tracker Assist</h2>
+        <noscript>Please enable the javascript for SmartyAssist to work!</noscript>
+        <form action="" id="searchbar">
+            <label for="search" id="search1">URL:</label>
+            <input type="text" id="search2" name="url" value="https://web.archive.org/web/20201202165354if_/https://firebasestorage.googleapis.com/v0/b/santa-tracker-firebase.appspot.com/o/route%2Fsanta_en.json?alt=media">
+            <button type="button" id="search3">Go!</button>
+        </form>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: larger;
+            }
+        </style>
+        <div id="results"></div>
+        <script>
+                var loading = false;
+                var res = document.getElementById("results")
+
+                function start() {
+                    loading = true
+                    let s = new XMLHttpRequest()
+                    s.open("GET", "https://api.allorigins.win/raw?url="+encodeURIComponent(document.getElementById("search2").value))
+                    s.onreadystatechange = function() {
+                        let prev = 0
+                        if (this.readyState == 4 && this.status <= 399) {
+                            o = ""
+                            data = JSON.parse(this.response).destinations
+                            data.forEach(function(i) {
+                                url = "getmaplace.html?lat="+i.location.lat+"&lng="+i.location.lng
+                                o += `<a href="`+url+`">`+i.city+", "+i.region+": "+i.population+" peoples, "+(i.presentsDelivered-prev)+" presents delivered"+`</a> <a href="`+url+"&cors=true"+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+i.location.lat+", "+i.location.lng+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+i.location.lat+","+i.location.lng+`')">Copy geoURI</button><br>`
+                            prev = i.presentsDelivered
+                            })
+                            loading = false
+                            res.innerHTML = o
+                        }
+                    }
+                    s.onerror = function() {
+                        loading = false
+                    }
+                    s.send()
+                }
+                window.addEventListener('keydown', function(e) {
+                    if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+                        if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
+                            e.preventDefault()
+                            document.getElementById("search3").onclick()
+                            return false
+                        }
+                    }
+                }, true)
+                document.getElementById("search3").onclick = function() {
+                    res.innerHTML = ""
+                    start()
+                }
+                start()
+        </script>
+    </body>
+</html>
