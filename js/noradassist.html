@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Norad Santa Assist</title>
+        <script src="https://cesium.com/downloads/cesiumjs/releases/1.76/Build/Cesium/Cesium.js"></script>
+    </head>
+    <body>
+        <h2>Norad Santa Assist</h2>
+        <noscript>Please enable the javascript for Norad Santa Assist to work!</noscript>
+        <form action="" id="searchbar">
+            <label for="search" id="search1">URL:</label>
+            <input type="text" id="search2" name="url" value="https://route.noradsanta.org/route20201222/67pppz.js">
+            <button type="button" id="search3">Go!</button>
+        </form>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: larger;
+            }
+        </style>
+        <div id="results"></div>
+        <script>
+                var loading = false;
+                var res = document.getElementById("results")
+
+                function start() {
+                    loading = true
+                    let s = new XMLHttpRequest()
+                    s.open("GET", document.getElementById("search2").value)
+                    s.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status <= 399) {
+                            o = ""
+                            data = JSON.parse(this.response.replace("addCZMLData(", "").replace(");", "")).slice(2,-1)
+                            for (k in data) {
+                                iPos = Cesium.Ellipsoid.WGS84.cartesianToCartographic(new Cesium.Cartesian3(data[k].position.cartesian[0],data[k].position.cartesian[1],data[k].position.cartesian[2]))
+                            	iLat = Cesium.Math.toDegrees(iPos.latitude)
+                            	iLng = Cesium.Math.toDegrees(iPos.longitude)
+                            	
+                            	url = "getmaplace.html?lat="+iLat+"&lng="+iLng
+                                o += `<a href="`+url+`">`+data[k].name+`</a> <a href="`+url+"&cors=true"+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+iLat+", "+iLng+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+iLat+","+iLng+`')">Copy geoURI</button><br>`
+                            }
+                            loading = false
+                            res.innerHTML = o
+                        }
+                    }
+                    s.onerror = function() {
+                        loading = false
+                    }
+                    s.send()
+                }
+                window.addEventListener('keydown', function(e) {
+                    if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+                        if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
+                            e.preventDefault()
+                            document.getElementById("search3").onclick()
+                            return false
+                        }
+                    }
+                }, true)
+                document.getElementById("search3").onclick = function() {
+                    res.innerHTML = ""
+                    start()
+                }
+                start()
+        </script>
+    </body>
+</html>
