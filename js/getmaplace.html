@@ -2,6 +2,7 @@
     <head>
         <title>PassiveAssists Demo</title>
         <script src="./passiveassist.js" crossorigin=""></script>
+        <script src="https://cdn.jsdelivr.net/openlocationcode/latest/openlocationcode.js"></script>
     </head>
     <body>
         <noscript>Please enable the javascript for PassiveAssist.js to work!</noscript>
@@ -82,20 +83,28 @@
             document.getElementById("search3").onclick = function() {
                 stopped = true
                 if (document.getElementById("search2").value != "") { 
-                    if (document.getElementById("search2").value.startsWith("geo:")) { // geo:35.335992,-79.038636
-                        lval = document.getElementById("search2").value
+                    let seq = document.getElementById("search2").value;
+
+                    if (document.getElementById("search2").value.indexOf("+") != -1) {
+                        let res = OpenLocationCode.decode(document.getElementById("search2").value);
+                        seq = `geo:${res.latitudeCenter},${res.longitudeCenter}`;
+                    }
+
+                    if (seq.startsWith("geo:")) { // geo:35.335992,-79.038636
+                        lval = seq
                         lpos = lval.split(":")[1]
                         ll = lpos.split(",")
                         xhr.open("GET",urls[document.getElementById("search4").value].replace("(query)", ll[1]+","+ll[0]) + (document.getElementById("search5").checked ? "&fuzzyMatch=false" : ""))
                     } else {
-                        xhr.open("GET",urls[document.getElementById("search4").value].replace("(query)", document.getElementById("search2").value) + (document.getElementById("search5").checked ? "&fuzzyMatch=false" : ""))
+                        xhr.open("GET",urls[document.getElementById("search4").value].replace("(query)", seq) + (document.getElementById("search5").checked ? "&fuzzyMatch=false" : ""))
                     }
+
                     xhr.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status <= 399) {
                             o = ""
                             rs = JSON.parse(this.responseText)
                             rs.features.forEach(function(feature){
-                                o += `<a href="getmaplace.html?lat=`+feature.center[1]+`&lng=`+feature.center[0]+`&q=`+document.getElementById("search2").value+`&type=`+document.getElementById("search4").value+`&exact=`+document.getElementById('search5').checked+`&dist=`+document.getElementById('search8').value+`">`+feature.place_name+` - `+feature.center[1]+`, `+feature.center[0]+`</a> - <a href="getmaplace.html?cors=true&lat=`+feature.center[1]+`&lng=`+feature.center[0]+`&q=`+document.getElementById("search2").value+`&type=`+document.getElementById("search4").value+`&exact=`+document.getElementById('search5').checked+`&dist=`+document.getElementById('search8').value+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+feature.center[1]+", "+feature.center[0]+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+feature.center[1]+","+feature.center[0]+`')">Copy geoURI</button><br>`
+                                o += `<a href="getmaplace.html?lat=`+feature.center[1]+`&lng=`+feature.center[0]+`&q=`+encodeURIComponent(document.getElementById("search2").value)+`&type=`+document.getElementById("search4").value+`&exact=`+document.getElementById('search5').checked+`&dist=`+document.getElementById('search8').value+`">`+feature.place_name+` (`+OpenLocationCode.encode(feature.center[1], feature.center[0], OpenLocationCode.CODE_PRECISION_EXTRA)+`) `+` - `+feature.center[1]+`, `+feature.center[0]+`</a> - <a href="getmaplace.html?cors=true&lat=`+feature.center[1]+`&lng=`+feature.center[0]+`&q=`+document.getElementById("search2").value+`&type=`+document.getElementById("search4").value+`&exact=`+document.getElementById('search5').checked+`&dist=`+document.getElementById('search8').value+`">CORS</a> - <button onclick="navigator.clipboard.writeText('`+feature.center[1]+", "+feature.center[0]+`')">Copy Coords</button> - <button onclick="navigator.clipboard.writeText('geo:`+feature.center[1]+","+feature.center[0]+`')">Copy geoURI</button><br>`
                             })
                             res.innerHTML = o
                             //console.log(res.innerHTML)
