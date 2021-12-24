@@ -142,6 +142,7 @@
                         p += `<a href="https://www.google.com/maps/place/`+lat+`,`+lng+`/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps</a> `
                         p += `<a href="https://www.google.com/maps/@`+lat+`,`+lng+`,15z/?hl=en&gl=US">Google Maps (NoPin)</a> `
                         p += `<a href="https://geohack.toolforge.org/geohack.php?language=en&params=`+lat+`;`+lng+`_type:gh_region:gh_scale:40000&pagename=`+resp.placeName+`">GeoHack</a>`
+                        p += ` <button onclick="navigator.clipboard.writeText('${lat}, ${lng}')">Copy Coords</button> <button onclick="navigator.clipboard.writeText('geo:${lat},${lng}')">Copy geoURI</button>`
                         p += "<br><b>The data will update every 5 seconds.</b>"
                         res.innerHTML = p
                         if (!stopped) {

@@ -37,7 +37,7 @@ function getAssistStr(loc, dist, patype=3, cors=false) {
 
 function getAssistAsync(lat, lng, dist, patype=3, cors=false, callback) {
     var xhr = new XMLHttpRequest()
-    lnk = "https://www.google.com/maps/preview/passiveassist?pb=!1m10!2m9!1m3!1d"+dist.toString()+"!2d"+lng+"!3d"+lat+"!2m0!3m2!1i1034!2i620!4f14!3m2!1sZBuUX_qxIsOA9QPH_b3QDA!7e81!7m"+patype+"!2b1!12b1!32b1!10m1!2i2&hl=en&gl=US&authuser=0"
+    lnk = "https://www.google.com/maps/preview/passiveassist?pb=!1m10!2m9!1m3!1d"+dist.toString()+"!2d"+lng+"!3d"+lat+"!2m0!3m2!1i1034!2i620!4f14!3m2!1sZBuUX_qxIsOA9QPH_b3QDA!7e81!7m"+patype+"!2b1!12b1!32b1!10m1!2i2!99s"+Math.floor(Math.random()*100000000)+"&hl=en&gl=US&authuser=0"
     if (!cors) {
         lnk = "https://api.allorigins.win/raw?url=" + encodeURIComponent(lnk)
     }
@@ -52,7 +52,7 @@ function getAssistAsync(lat, lng, dist, patype=3, cors=false, callback) {
 
 function getAssist(lat, lng, dist, patype=3, cors=false) {
     xhr = new XMLHttpRequest()
-    lnk = "https://www.google.com/maps/preview/passiveassist?pb=!1m10!2m9!1m3!1d"+dist.toString()+"!2d"+lng+"!3d"+lat+"!2m0!3m2!1i1034!2i620!4f14!3m2!1sZBuUX_qxIsOA9QPH_b3QDA!7e81!7m"+patype+"!2b1!12b1!32b1!10m1!2i2&hl=en&gl=US&authuser=0"
+    lnk = "https://www.google.com/maps/preview/passiveassist?pb=!1m10!2m9!1m3!1d"+dist.toString()+"!2d"+lng+"!3d"+lat+"!2m0!3m2!1i1034!2i620!4f14!3m2!1sZBuUX_qxIsOA9QPH_b3QDA!7e81!7m"+patype+"!2b1!12b1!32b1!10m1!2i2!99s"+Math.floor(Math.random()*100000000)+"&hl=en&gl=US&authuser=0"
     if (!cors) {
         lnk = "https://api.allorigins.win/raw?url=" + encodeURIComponent(lnk)
     }
